@@ -13,7 +13,7 @@ namespace MinecraftClone.World {
         // the underlying block
         public BaseBlock block;
 
-        public Dictionary<Faces, FaceData> faces;
+        private Dictionary<Faces, FaceData> faces;
 
         public Dictionary<Faces, List<Vector2>> blockUV = new Dictionary<Faces, List<Vector2>>() {
             { Faces.FRONT, new List<Vector2>()},
@@ -32,35 +32,6 @@ namespace MinecraftClone.World {
             }
 
             // Console.WriteLine("created a block mesh at " + position + " of type " + this.block.Name());
-
-            faces = new Dictionary<Faces, FaceData>
-            {
-                {Faces.FRONT, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.FRONT]),
-                    uv = blockUV[Faces.FRONT]
-                } },
-                {Faces.BACK, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.BACK]),
-                    uv = blockUV[Faces.BACK]
-                } },
-                {Faces.LEFT, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.LEFT]),
-                    uv = blockUV[Faces.LEFT]
-                } },
-                {Faces.RIGHT, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.RIGHT]),
-                    uv = blockUV[Faces.RIGHT]
-                } },
-                {Faces.TOP, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.TOP]),
-                    uv = blockUV[Faces.TOP]
-                } },
-                {Faces.BOTTOM, new FaceData {
-                    vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[Faces.BOTTOM]),
-                    uv = blockUV[Faces.BOTTOM]
-                } },
-
-            };
         }
         public List<Vector3> AddTransformedVertices(List<Vector3> vertices) {
             List<Vector3> transformedVertices = new List<Vector3>();
@@ -70,7 +41,10 @@ namespace MinecraftClone.World {
             return transformedVertices;
         }
         public FaceData GetFace(Faces face) {
-            return faces[face];
+            return new FaceData {
+                vertices = AddTransformedVertices(FaceDataRaw.rawVertexData[face]),
+                uv = blockUV[face],
+            };
         }
     }
 }

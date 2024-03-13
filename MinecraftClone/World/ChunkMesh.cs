@@ -28,9 +28,6 @@ namespace MinecraftClone.World {
 
         Texture texture;
 
-        
-        
-
         // the underlying chunk. from here we can get the block types at every pos
         Chunk chunk;
         public ChunkMesh(Chunk chunk) {
@@ -41,40 +38,9 @@ namespace MinecraftClone.World {
             chunkUVs = new List<Vector2>();
             chunkIndices = new List<uint>();
 
-            
-            float[,] heightMap = GenChunk();
-            GenBlocks();
             GenFaces();
             BuildChunk();
         }
-
-        // TODO: Move this into the ChunkProvider class
-        public float[,] GenChunk() { // generate the data
-            float[,] heightmap = new float[Chunk.SIZE, Chunk.SIZE];
-
-            SimplexNoise.Noise.Seed = 1;
-            for (int x = 0; x < Chunk.SIZE; x++) {
-                for (int z = 0; z < Chunk.SIZE; z++) {
-                    heightmap[x, z] = SimplexNoise.Noise.CalcPixel2D(x, z, 0.01f);
-                }
-            }
-
-            return heightmap;
-        } 
-
-        // fills the chunkBlocks array with the Block Meshes
-        public void GenBlocks() {
-            
-            for (int x = 0; x < Chunk.SIZE; x++) {
-                for (int z = 0; z < Chunk.SIZE; z++) {
-                    // removed heightmap optimization because skill issue
-                    // int columnHeight = this.chunk.heightmap[x, z];
-                    for (int y = 0; y < Chunk.HEIGHT; y++) {
-                        // chunkBlocks[x, y, z] = new BlockMesh(new Vector3(x + position.X, y + position.Y, z + position.Z), this.chunk.GetBlock(x, y, z));
-                    }
-                }
-            }            
-        } 
 
         public BlockMesh GetMeshAt(int x, int y, int z) {
             return new BlockMesh(new Vector3(x + position.X, y + position.Y, z + position.Z), this.chunk.GetBlock(x, y, z));
