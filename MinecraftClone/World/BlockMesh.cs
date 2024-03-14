@@ -1,4 +1,5 @@
 ﻿using MinecraftClone.World.Block;
+using MinecraftClone.World.States;
 using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,8 @@ namespace MinecraftClone.World {
     internal class BlockMesh {
         public Vector3 position;
 
-        // the underlying block
-        public BaseBlock block;
+        // the underlying blockstate
+        public BlockState blockState;
 
         private Dictionary<Faces, FaceData> faces;
 
@@ -23,12 +24,12 @@ namespace MinecraftClone.World {
             { Faces.LEFT, new List<Vector2>()},
             { Faces.RIGHT, new List<Vector2>()},
         };
-        public BlockMesh(Vector3 position, BaseBlock block) {
+        public BlockMesh(Vector3 position, BlockState blockState) {
             this.position = position;
-            this.block = block;
+            this.blockState = blockState;
 
-            if (!(this.block is AirBlock)) {
-                blockUV = block.GetTextureData().ToUVs();
+            if (blockState.GetBlock().GetTextureData(blockState) != null) {
+                blockUV = blockState.GetBlock().GetTextureData(blockState).ToUVs();
             }
 
             // Console.WriteLine("created a block mesh at " + position + " of type " + this.block.Name());

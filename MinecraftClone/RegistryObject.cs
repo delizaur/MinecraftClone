@@ -5,12 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MinecraftClone {
-    internal class RegistryObject<T> {
-        public int id;
-        public T obj;
+    internal class RegistryObject {
+        // how to make this so that it can only be set once by the registry?
 
-        public static implicit operator T(RegistryObject<T> registryObject) {
-            return registryObject.obj;
+        private short id;
+
+        // pretty please this should only be called during registration
+        public void SetId(short id) {
+            this.id = id;
+        }
+
+        public short GetId() {
+            return id;
         }
     }
 }

@@ -1,0 +1,55 @@
+﻿using MinecraftClone.World.Block;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MinecraftClone.World.States
+{
+    internal struct BlockState
+    {
+
+        private short blockID;
+        private short serializedState;
+
+        // construct a block state from a block reference and deserialized state
+        // caller must enforce that state passed in corresponds to the block's state
+        public BlockState(BaseBlock block, State state) {
+            Debug.Assert(block.GetDefaultState().GetType() == state.GetType());
+            this.blockID = block.GetId();
+            this.serializedState = state.Serialize();
+        }
+
+        // construct a new block state with the block's default state
+        public BlockState(BaseBlock block) {
+            this.blockID = block.GetId();
+            this.serializedState = block.GetDefaultState().Serialize();
+        }
+
+        /* public BlockStateWrapper<S> CopyAs<S>() where S : State {
+            Debug.Assert(state is S);
+            return new BlockStateWrapper<S>(block, (S)state);
+        } */
+
+        /* Idea: forget about creating every possible blockstate at the start and making the world store references to that
+         * instead, just make the world a collection of blockstates (structs, not references) where we store the blockId (short)
+         * and the serialized state (short). this is way simple but potentially less type safe
+         * 
+         */
+
+        public S GetStateAs<S>() where S: State, new() {
+            return (S)new S().Deserialize(serializedState);
+        }
+
+        public void SetState<S>(S state) where S: State {
+            Debug.Assert(this.GetBlock().GetDefaultState() is S);
+            serializedState = state.Serialize();
+        }
+
+        public BaseBlock GetBlock() {
+            return Blocks.blockRegistry.GetById(blockID);
+        }
+    }
+}

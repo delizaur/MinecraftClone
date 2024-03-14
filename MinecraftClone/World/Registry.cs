@@ -7,25 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MinecraftClone.World {
-    internal class Registry<T> {
+    internal class Registry<T> where T : RegistryObject {
 
         List<T> objects = new List<T>();
         Dictionary<string, int> namesToIndices = new Dictionary<string, int>();
 
-        public RegistryObject<SubT> Register<SubT>(string name, SubT obj) where SubT : T {
-            // the index in which this object will be stored
-            int index = objects.Count;
-            objects.Add(obj);
-            namesToIndices.Add(name, index);
-            return new RegistryObject<SubT>() {
-                id = index,
-                obj = obj
-            };
-        }
-
         public SubT Register2<SubT>(string name, SubT obj) where SubT : T {
             int index = objects.Count;
             objects.Add(obj);
+            obj.SetId((short)index);
             namesToIndices.Add(name, index);
             return obj;
         }
@@ -34,6 +24,10 @@ namespace MinecraftClone.World {
             // TODO: What if the name isn't found??
             int index = namesToIndices[name];
             return objects[index];
+        }
+
+        public T GetById(int id) {
+            return objects[id];
         }
 
     }

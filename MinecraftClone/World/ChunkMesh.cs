@@ -13,6 +13,8 @@ using System.Data.Common;
 
 namespace MinecraftClone.World {
     internal class ChunkMesh {
+
+        // TODO: figure out how to pack and unpack these vectors
         public List<Vector3> chunkVerts;
         public List<Vector2> chunkUVs;
         public List<uint> chunkIndices;
@@ -43,11 +45,12 @@ namespace MinecraftClone.World {
         }
 
         public BlockMesh GetMeshAt(int x, int y, int z) {
-            return new BlockMesh(new Vector3(x + position.X, y + position.Y, z + position.Z), this.chunk.GetBlock(x, y, z));
+            return new BlockMesh(new Vector3(x + position.X, y + position.Y, z + position.Z), this.chunk.GetBlockState(x, y, z));
         }
 
         // generate the appropiate block faces given the data
         public void GenFaces() {
+            Console.WriteLine("Generating faces of chunk at " + position);
             for (int x = 0; x < Chunk.SIZE; x++) {
                 for (int z = 0; z < Chunk.SIZE; z++) {
                     int columnHeight = this.chunk.heightmap[x, z] + 1; // uhh this +1 shouldn't be here but idk how to properly fix it
@@ -90,7 +93,7 @@ namespace MinecraftClone.World {
                         // qualifications: block above is emmpty, is farthest up in chunk
                         if (y < columnHeight - 1) {
                             if (chunk.GetBlock(x, y+1, z) is AirBlock) {
-                                IntegrateFace(GetMeshAt(x, y, z), Faces.TOP);
+                                IntegrateFace(currMesh, Faces.TOP);
                                 numFaces++;
                             }
                         } else {
