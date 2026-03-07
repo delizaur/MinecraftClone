@@ -6,16 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MinecraftClone.World.States {
-    internal class BlockStateWrapper<S> where S : State {
+    internal class DeserializedBlockState<S> where S : State {
         public BaseBlock block;
         public S state;
 
-        public BlockStateWrapper(BaseBlock block, S state) {
+        public DeserializedBlockState(BaseBlock block, S state) {
             this.block = block;
             this.state = state;
         }
 
-        public static implicit operator BlockState(BlockStateWrapper<S> wrapper) {
+        public static implicit operator BlockState(DeserializedBlockState<S> wrapper) {
             return new BlockState(wrapper.block, wrapper.state);
         }
     }

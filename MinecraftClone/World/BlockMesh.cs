@@ -14,8 +14,6 @@ namespace MinecraftClone.World {
         // the underlying blockstate
         public BlockState blockState;
 
-        private Dictionary<Faces, FaceData> faces;
-
         public Dictionary<Faces, List<Vector2>> blockUV = new Dictionary<Faces, List<Vector2>>() {
             { Faces.FRONT, new List<Vector2>()},
             { Faces.BACK, new List<Vector2>()},
@@ -28,8 +26,10 @@ namespace MinecraftClone.World {
             this.position = position;
             this.blockState = blockState;
 
-            if (blockState.GetBlock().GetTextureData(blockState) != null) {
-                blockUV = blockState.GetBlock().GetTextureData(blockState).ToUVs();
+            BlockTextureData textureData = blockState.GetBlock().GetTextureData(blockState);
+            // sometimes the texture data is null if the block doesn't have to be rendered (such as air)
+            if (textureData != null) {
+                blockUV = textureData.ToUVs();
             }
 
             // Console.WriteLine("created a block mesh at " + position + " of type " + this.block.Name());

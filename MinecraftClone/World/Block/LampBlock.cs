@@ -27,10 +27,9 @@ namespace MinecraftClone.World.Block {
         }
 
         public override void OnRightClick(MinecraftWorld world, BlockState state, Vector3i pos) {
-            // var next = state.CopyAs<LampState>();
-            // next.state.powered = next.state.powered.Toggle();
-            // world.SetBlockState(pos, next); 
-
+            var next = state.GetAs<LampState>();
+            next.state.powered = !next.state.powered;
+            world.SetBlockState(pos, next);
         }
 
         public class LampState : State {

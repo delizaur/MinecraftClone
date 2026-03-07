@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace MinecraftClone.World {
     internal class ChunkGenerator {
+
+        private static Random rng = new Random();
         public Chunk GenerateChunk(int worldX, int worldZ) {
+            Console.WriteLine("Generating chunk at pos " + worldX + ", " + worldZ);
             Chunk chunk = new Chunk(worldX, worldZ);
             SimplexNoise.Noise.Seed = 1;
             for (int x = 0; x < Chunk.SIZE; x++) {
@@ -20,6 +23,13 @@ namespace MinecraftClone.World {
                     chunk.SetBlock(x, columnHeight, z, Blocks.GRASS);
                     for (int y = 0; y < columnHeight; y++) {
                         chunk.SetBlock(x, y, z, Blocks.DIRT);
+                    }
+
+                    // tree trunk generation
+                    if (rng.Next(30) == 0) {
+                        chunk.SetBlock(x, columnHeight + 1, z, Blocks.LOG);
+                        chunk.SetBlock(x, columnHeight + 2, z, Blocks.LOG);
+                        chunk.SetBlock(x, columnHeight + 3, z, Blocks.LOG);
                     }
                 }
             }
